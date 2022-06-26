@@ -5,6 +5,7 @@ edition = "2021"
 
 
 [dependencies]
+macroquad = "0.3"
 
 [[bin]]
 name = "raycast"
