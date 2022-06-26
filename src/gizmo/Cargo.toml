@@ -8,5 +8,5 @@ edition = "2021"
 [dependencies]
 
 [[bin]]
-name = "raycast"
-path = "../../bins/raycast.rs"
+name = "gizmo"
+path = "../../bins/gizmo.rs"

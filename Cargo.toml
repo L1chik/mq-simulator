@@ -1,3 +1,6 @@
 workspace = [
-  
+  "src/raycast",
+  "src/gizmo",  
+  "src/object_system"
+  "bins"
 ]
