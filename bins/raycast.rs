@@ -18,9 +18,11 @@ async fn main() {
     };
     let mut mouse_right_is_pressed = false;
     let mut mouse_middle_is_pressed = false;
+    let mut mouse_left_is_pressed = false;
     let mut last_mouse_pos: Vec2 = mouse_position().into();
     let mut mouse_x = vec3(0., 0., 0.);
     let mut new_x = vec3(0., 0., 0.);
+    let mut mp = vec2(0., 0.);
     loop {
         let delta = get_frame_time();
         let speed = 0.2; 
@@ -50,6 +52,24 @@ async fn main() {
             }
         }
 
+        if is_mouse_button_down(MouseButton::Left) {
+            if mouse_left_is_pressed {
+                //Hold
+            }else {
+                //Press
+                mouse_left_is_pressed = true;
+                let mouse_pos: Vec2 = mouse_position().into();
+                mp = vec2(mouse_pos.x - (screen_width() / 2.), (screen_height() / 2.) - mouse_pos.y);
+            }
+        } else {
+            if mouse_left_is_pressed {
+                //Release
+                mouse_left_is_pressed = false;
+            }else {
+                //Not pressed
+            }
+        }
+
         if is_mouse_button_down(MouseButton::Right) {
             if mouse_right_is_pressed {
                 //Hold
@@ -61,7 +81,7 @@ async fn main() {
                 let rotate_mat2 = Mat3::from_axis_angle(world_axes.y_axis, angle.x);
                 let sum_rotate = rotate_mat.mul_mat3(&rotate_mat2);
                 //let rot = Quat::from_rotation_ypr(angle.x * -1., angle.y, 0.);
-               
+                
                 main_camera.local.z_axis = sum_rotate.mul_vec3(main_camera.local.z_axis).normalize();
                 main_camera.local.x_axis = world_axes.y_axis.cross(main_camera.local.z_axis).normalize();
                 main_camera.local.y_axis = main_camera.local.z_axis.cross(main_camera.local.x_axis).normalize();
@@ -107,7 +127,7 @@ async fn main() {
             ..Default::default()
         });
 
-        draw_grid(20, 1., BLACK, GRAY);
+        draw_grid(50, 10., BLACK, GRAY);
 
         draw_cube(vec3(0., 2.5, 0.), vec3(5., 5., 5.), None, GRAY);
         
@@ -125,6 +145,14 @@ async fn main() {
         draw_text(&*format!("x*y={}, x*z={},", main_camera.local.x_axis.dot(main_camera.local.y_axis), main_camera.local.x_axis.dot(main_camera.local.z_axis)), 800., 80., 16., BLACK);
         draw_text(&*format!("y*x={}, y*z={},", main_camera.local.y_axis.dot(main_camera.local.x_axis), main_camera.local.y_axis.dot(main_camera.local.z_axis)), 800., 110., 16., BLACK);
         draw_text(&*format!("z*x={}, z*y={},", main_camera.local.z_axis.dot(main_camera.local.x_axis), main_camera.local.z_axis.dot(main_camera.local.y_axis)), 800., 140., 16., BLACK);
+        draw_text(&*format!("{}", mp), 10., 200., 16., BLACK);
+        draw_text(&*format!("{:?}", Camera3D {
+            position: main_camera.position,
+            up: main_camera.local.y_axis,
+            target: main_camera.position + main_camera.local.z_axis,
+            //aspect: Some(screen_width() / screen_height()),
+            //viewport: Some((0, 0, screen_width() as i32 - 200, screen_height() as i32 - 100)),
+            ..Default::default()}), 10., 400., 16., BLACK);
 
         next_frame().await
     }
