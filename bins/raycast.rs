@@ -1,9 +1,12 @@
 use macroquad::prelude::*;
 
+use crate::raycast::*;
+
 struct MyCamera {
     position: Vec3,
     local: Mat3,
 }
+
 
 #[macroquad::main("3D")]
 async fn main() {
@@ -60,6 +63,7 @@ async fn main() {
                 mouse_left_is_pressed = true;
                 let mouse_pos: Vec2 = mouse_position().into();
                 mp = vec2(mouse_pos.x - (screen_width() / 2.), (screen_height() / 2.) - mouse_pos.y);
+                cast();
             }
         } else {
             if mouse_left_is_pressed {
@@ -130,6 +134,7 @@ async fn main() {
         draw_grid(50, 10., BLACK, GRAY);
 
         draw_cube(vec3(0., 2.5, 0.), vec3(5., 5., 5.), None, GRAY);
+        draw_cube(vec3(0., 0., -5.), vec3(5., 5., 5.), None, GRAY);
         
         set_default_camera();
         draw_text(&*get_fps().to_string(), 10., 20., 32., BLACK);

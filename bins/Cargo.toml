@@ -1,0 +1,14 @@
+[package]
+name = "bins"
+version = "0.1.0"
+edition = "2021"
+default-run = "raycast"
+
+[dependencies.raycast]
+package = "raycast"
+path = "../src/raycast"
+
+
+[[bin]]
+name = "raycast"
+path = "./raycast.rs"
