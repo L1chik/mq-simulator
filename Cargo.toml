@@ -1,5 +1,6 @@
 [workspace]
 members = [
   "src/raycast",
-  "src/gizmo",  
+  "src/gizmo",
+  "bins"
 ]

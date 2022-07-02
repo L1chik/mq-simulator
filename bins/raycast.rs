@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-use crate::raycast::*;
+use raycast::ray::Ray;
 
 struct MyCamera {
     position: Vec3,
@@ -63,7 +63,7 @@ async fn main() {
                 mouse_left_is_pressed = true;
                 let mouse_pos: Vec2 = mouse_position().into();
                 mp = vec2(mouse_pos.x - (screen_width() / 2.), (screen_height() / 2.) - mouse_pos.y);
-                cast();
+                // cast();
             }
         } else {
             if mouse_left_is_pressed {

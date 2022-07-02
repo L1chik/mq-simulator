@@ -9,4 +9,4 @@ macroquad = "0.3"
 
 [lib]
 name = "raycast"
-path = "."
+path = "./lib.rs"
