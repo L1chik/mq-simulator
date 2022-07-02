@@ -1,10 +1,221 @@
 use macroquad::prelude::*;
 
+use macroquad::models::{draw_mesh, Vertex};
+
+use macroquad::color::Color;
+
 use raycast::ray::Ray;
 
 struct MyCamera {
     position: Vec3,
     local: Mat3,
+}
+
+struct MyCube {
+    pos: Vec3,
+    points: [Vec3; 8],
+    scale: Vec3,
+}
+
+
+impl Default for MyCube {
+    fn default() -> MyCube {
+        let mut mycube = MyCube{
+            pos: vec3(0., 0., 0.),
+            points: [Vec3::one(); 8],
+            scale: vec3(5., 5., 5.)
+        };
+        mycube.points[0] = vec3(mycube.pos.x - mycube.scale.x / 2., mycube.pos.y + mycube.scale.y / 2., mycube.pos.z - mycube.scale.z /2.);
+        mycube.points[1] = vec3(mycube.pos.x - mycube.scale.x / 2., mycube.pos.y + mycube.scale.y / 2., mycube.pos.z + mycube.scale.z /2.);
+        mycube.points[2] = vec3(mycube.pos.x + mycube.scale.x / 2., mycube.pos.y + mycube.scale.y / 2., mycube.pos.z + mycube.scale.z /2.);
+        mycube.points[3] = vec3(mycube.pos.x + mycube.scale.x / 2., mycube.pos.y + mycube.scale.y / 2., mycube.pos.z - mycube.scale.z /2.);
+        mycube.points[4] = vec3(mycube.pos.x + mycube.scale.x / 2., mycube.pos.y - mycube.scale.y / 2., mycube.pos.z - mycube.scale.z /2.);
+        mycube.points[5] = vec3(mycube.pos.x - mycube.scale.x / 2., mycube.pos.y - mycube.scale.y / 2., mycube.pos.z - mycube.scale.z /2.);
+        mycube.points[6] = vec3(mycube.pos.x - mycube.scale.x / 2., mycube.pos.y - mycube.scale.y / 2., mycube.pos.z + mycube.scale.z /2.);
+        mycube.points[7] = vec3(mycube.pos.x + mycube.scale.x / 2., mycube.pos.y - mycube.scale.y / 2., mycube.pos.z + mycube.scale.z /2.);
+        mycube
+    }
+}
+
+impl MyCube {
+    pub fn draw(&self, color: Color) {
+        let mesh = Mesh{
+            vertices: vec![
+                Vertex{
+                    position: self.points[0], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[1],
+                    uv: vec2(0., 0.),
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[2], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[3], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                },
+            ],
+            indices: vec![0, 1, 2, 0, 2, 3],
+            texture: None
+        };
+        draw_mesh(&mesh);
+        let mesh = Mesh{
+            vertices: vec![
+                Vertex{
+                    position: self.points[0], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[1],
+                    uv: vec2(0., 0.),
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[6], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[5], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                },
+            ],
+            indices: vec![0, 1, 2, 0, 2, 3],
+            texture: None
+        };
+        draw_mesh(&mesh);
+        let mesh = Mesh{
+            vertices: vec![
+                Vertex{
+                    position: self.points[2], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[3],
+                    uv: vec2(0., 0.),
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[4], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[7], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                },
+            ],
+            indices: vec![0, 1, 2, 0, 2, 3],
+            texture: None
+        };
+        draw_mesh(&mesh);
+        let mesh = Mesh{
+            vertices: vec![
+                Vertex{
+                    position: self.points[0], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[3],
+                    uv: vec2(0., 0.),
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[4], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[5], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                },
+            ],
+            indices: vec![0, 1, 2, 0, 2, 3],
+            texture: None
+        };
+        draw_mesh(&mesh);
+        let mesh = Mesh{
+            vertices: vec![
+                Vertex{
+                    position: self.points[1], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[2],
+                    uv: vec2(0., 0.),
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[7], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[6], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                },
+            ],
+            indices: vec![0, 1, 2, 0, 2, 3],
+            texture: None
+        };
+        draw_mesh(&mesh);
+        let mesh = Mesh{
+            vertices: vec![
+                Vertex{
+                    position: self.points[4], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[5],
+                    uv: vec2(0., 0.),
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[6], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                }, 
+                Vertex{
+                    position: self.points[7], 
+                    uv: vec2(0., 0.), 
+                    color: color
+                },
+            ],
+            indices: vec![0, 1, 2, 0, 2, 3],
+            texture: None
+        };
+        draw_mesh(&mesh);
+    }
+
+    pub fn rotate_z(&mut self, angle: f32) {
+        let r = Quat::from_rotation_z(angle);
+        for i in 0..8 {
+            self.points[i] = r.mul_vec3(self.points[i]);
+        }
+    }
+
+    pub fn rotate_x(&mut self, angle: f32) {
+        let r = Quat::from_rotation_x(angle);
+        for i in 0..8 {
+            self.points[i] = r.mul_vec3(self.points[i]);
+        }
+    }
 }
 
 
@@ -26,6 +237,7 @@ async fn main() {
     let mut mouse_x = vec3(0., 0., 0.);
     let mut new_x = vec3(0., 0., 0.);
     let mut mp = vec2(0., 0.);
+    let mut my_cube = MyCube::default();
     loop {
         let delta = get_frame_time();
         let speed = 0.2; 
@@ -109,7 +321,26 @@ async fn main() {
                 //Not pressed
             }
         }
+
+        if is_key_down(KeyCode::Right) {
+            let angle = 5. * delta;
+            my_cube.rotate_z(angle);
+        }   
  
+        if is_key_down(KeyCode::Left) {
+            let angle = -5. * delta;
+            my_cube.rotate_z(angle);
+        }   
+
+        if is_key_down(KeyCode::Up) {
+            let angle = 5. * delta;
+            my_cube.rotate_x(angle);
+        }   
+ 
+        if is_key_down(KeyCode::Down) {
+            let angle = -5. * delta;
+            my_cube.rotate_x(angle);
+        }   
         //Change
 
 
@@ -132,9 +363,9 @@ async fn main() {
         });
 
         draw_grid(50, 10., BLACK, GRAY);
-
-        draw_cube(vec3(0., 2.5, 0.), vec3(5., 5., 5.), None, GRAY);
-        draw_cube(vec3(0., 0., -5.), vec3(5., 5., 5.), None, GRAY);
+        
+        my_cube.draw(GRAY);
+        //draw_cube(vec3(0., 0., -5.), vec3(5., 5., 5.), None, GRAY);
         
         set_default_camera();
         draw_text(&*get_fps().to_string(), 10., 20., 32., BLACK);
