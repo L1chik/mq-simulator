@@ -8,7 +8,7 @@ pub struct Ray{
 }
 
 impl Ray {
-    pub fn cast<'a>(&'a self, scene: &'a Vec<GameObject>) -> Option<&GameObject> {
+    pub fn cast<'a, 'b>(&'a self, scene: &'b Vec<GameObject>) -> Option<&'b GameObject> {
         let mut result: Option<&GameObject> = None;
         let mut min_distance = 10000.;
         for obj in scene {

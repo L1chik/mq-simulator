@@ -132,6 +132,7 @@ impl Default for GameObject {
 pub trait Primitivies {
     fn cube() -> Self;
     fn cube_with_pos(pos: Vec3) -> Self;
+    fn cube_with_texture(pos: Vec3, texture: Option<Texture2D>) -> Self;
 }
 
 impl Primitivies for GameObject {
@@ -183,6 +184,32 @@ impl Primitivies for GameObject {
                 1, 6, 2,    7, 6, 2, //back
             ],
             texture: None
+        });
+        cube
+    }
+
+    fn cube_with_texture(pos: Vec3, texture: Option<Texture2D>) -> GameObject {
+        let mut cube = GameObject::default();
+        cube.mesh = Some(Mesh{
+            vertices: vec![
+                Vertex{position: pos + cube.scale_matrix().mul_vec3(vec3(-1., 1., -1.)), uv: vec2(0., 0.), color: RED},
+                Vertex{position: pos + cube.scale_matrix().mul_vec3(vec3(-1., 1., 1.)), uv: vec2(0., 0.), color: GRAY},
+                Vertex{position: pos + cube.scale_matrix().mul_vec3(vec3(1., 1., 1.)), uv: vec2(0., 0.), color: GRAY},
+                Vertex{position: pos + cube.scale_matrix().mul_vec3(vec3(1., 1., -1.)), uv: vec2(1., 0.), color: GRAY},
+                Vertex{position: pos + cube.scale_matrix().mul_vec3(vec3(1., -1., -1.)), uv: vec2(0., 1.), color: GRAY},
+                Vertex{position: pos + cube.scale_matrix().mul_vec3(vec3(-1., -1., -1.)), uv: vec2(1., 1.), color: GRAY},
+                Vertex{position: pos + cube.scale_matrix().mul_vec3(vec3(-1., -1., 1.)), uv: vec2(0., 0.), color: GRAY},
+                Vertex{position: pos + cube.scale_matrix().mul_vec3(vec3(1., -1., 1.)), uv: vec2(0., 0.), color: GRAY},
+            ],
+            indices: vec![
+                0, 3, 5,    4, 3, 5, //front
+                3, 2, 4,    7, 2, 4, //right
+                0, 1, 3,    2, 1, 3, //up
+                0, 1, 5,    6, 1, 5, //left
+                5, 6, 4,    7, 6, 4, //down
+                1, 6, 2,    7, 6, 2, //back
+            ],
+            texture: texture
         });
         cube
     }

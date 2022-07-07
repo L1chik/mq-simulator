@@ -6,7 +6,7 @@ use macroquad::color::Color;
 
 use raycast::ray::Ray;
 use raycast::camera::{MainCamera};
-use raycast::primitivies::{GameObject, Primitivies};
+use raycast::objects::{GameObject, Primitivies, Transform, Render};
 use raycast::world_axes;
 
 struct MyCamera {
@@ -14,7 +14,7 @@ struct MyCamera {
     local: Mat3,
 }
 
-fn draw_selected(selected: Option<&GameObject>, color: Color) {
+/*fn draw_selected(selected: Option<&GameObject>, color: Color) {
     match selected {
         Some(x) => {
             let mesh = x.mesh.as_ref().unwrap();
@@ -32,7 +32,7 @@ fn draw_selected(selected: Option<&GameObject>, color: Color) {
         },
         _ => ()
     }
-}
+}*/
 
 #[macroquad::main("3D")]
 async fn main() {
@@ -49,12 +49,9 @@ async fn main() {
         direction: vec3(0., 0., 1.),
     };
     let mut selected: Option<&GameObject> = None;
-    let cube1: GameObject = Primitivies::cube_with_pos(vec3(0., 0., 0.));
-    let cube2: GameObject = Primitivies::cube_with_pos(vec3(-2., 0.5, -3.));
-    let cube3: GameObject = Primitivies::cube_with_pos(vec3(5., 5., 5.));
-    let cube4: GameObject = Primitivies::cube_with_pos(vec3(-3., 0.5, 4.));
-    let cube5: GameObject = Primitivies::cube_with_pos(vec3(1., 1., 3.));
-    let mut scene = vec![cube1, cube2, cube3, cube4, cube5];
+    let rust_logo = load_texture("rust.png").await.unwrap();
+    let cube = GameObject::new(Some(Transform::default()), Some(Primitivies::cube(Some(rust_logo))));
+    let mut scene = vec![cube];
     loop {
         let delta = get_frame_time();
         let speed = 0.2; 
@@ -84,7 +81,7 @@ async fn main() {
             }
         }
 
-        if is_mouse_button_down(MouseButton::Left) {
+        /*if is_mouse_button_down(MouseButton::Left) {
             if mouse_left_is_pressed {
                 //Hold
             }else {
@@ -107,7 +104,7 @@ async fn main() {
             }else {
                 //Not pressed
             }
-        }
+        }*/
 
         if is_mouse_button_down(MouseButton::Right) {
             if mouse_right_is_pressed {
@@ -182,10 +179,10 @@ async fn main() {
         draw_grid(50, 10., BLACK, GRAY);
         
         for obj in scene.iter() {
-            obj.draw();
+            obj.render();
         }
     
-        draw_selected(selected, YELLOW);
+       // draw_selected(selected, YELLOW);
 
         set_default_camera();
         draw_text(&*get_fps().to_string(), 10., 20., 32., BLACK);
