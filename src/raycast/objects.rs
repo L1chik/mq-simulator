@@ -13,16 +13,16 @@ pub struct Transform {
 
 impl Transform {
     fn matrix(&self) -> Mat4 {
-        Mat4::from_scale_rotation_translation(self.scale, Quat::IDENTITY, self.position)
+        Mat4::from_scale_rotation_translation(self.scale, Quat::from_rotation_ypr(self.rotation.x, self.rotation.y, self.rotation.z), self.position)
     }
 }
 
 impl Default for Transform {
     fn default() -> Transform {
         Transform {
-            position: Vec3::ZERO, 
-            rotation: Vec3::ZERO, 
-            scale: Vec3::ONE,
+            position: vec3(0., 2., 0.), 
+            rotation: vec3(0., 0., 90.0_f32.to_radians()),
+            scale: vec3(10., 1., 3.),
         }
     }
 }
@@ -39,8 +39,15 @@ impl GameObject {
             mesh: mesh,
         }
     }
+}
+
+pub trait Render {
+    fn render(&self);
+}
+
+impl Render for GameObject {
     //TODO REFACTOR!
-    pub fn render(&self) {
+    fn render(&self) {
         let transformed_mesh: Mesh;
         match &self.mesh {
             Some(x) => transformed_mesh = Mesh {
@@ -48,7 +55,8 @@ impl GameObject {
                     .iter()
                     .map(|v| 
                         Vertex {
-                            position: Mat4::from_scale_rotation_translation(self.transform.scale, Quat::IDENTITY, self.transform.position)
+                            position: self.transform
+                                .matrix() 
                                 .mul_vec4(v.position.extend(1.))
                                 .truncate(), 
                             uv: v.uv, 
@@ -63,11 +71,6 @@ impl GameObject {
         draw_mesh(&transformed_mesh);
     }
 }
-
-pub trait Render {
-    fn render(&self);
-}
-
 
 pub struct Primitivies {
     mesh: Mesh,
