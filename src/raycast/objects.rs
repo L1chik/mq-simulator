@@ -1,14 +1,18 @@
 use macroquad::
 {
     prelude::*,
-    models::{Mesh, Vertex}
+    models::{Mesh, Vertex},
+};
+use crate::{
+    components::{Render, Physics},
 };
 
 
+
 pub struct Transform {
-    position: Vec3,
-    rotation: Vec3,
-    scale: Vec3,
+    pub position: Vec3,
+    pub rotation: Vec3,
+    pub scale: Vec3,
 }
 
 impl Transform {
@@ -20,16 +24,16 @@ impl Transform {
 impl Default for Transform {
     fn default() -> Transform {
         Transform {
-            position: vec3(0., 2., 0.), 
-            rotation: vec3(0., 0., 90.0_f32.to_radians()),
-            scale: vec3(10., 1., 3.),
+            position: vec3(-10., 10., 3.), 
+            rotation: vec3(0., 0., 45.0_f32.to_radians()),
+            scale: vec3(5., 5., 5.),
         }
     }
 }
 
 pub struct GameObject{
-    transform: Transform,
-    mesh: Option<Mesh>,
+    pub transform: Transform,
+    pub mesh: Option<Mesh>,
 }
 
 impl GameObject {
@@ -39,15 +43,8 @@ impl GameObject {
             mesh: mesh,
         }
     }
-}
 
-pub trait Render {
-    fn render(&self);
-}
-
-impl Render for GameObject {
-    //TODO REFACTOR!
-    fn render(&self) {
+    pub fn get_transformed_mesh(&self) -> Option<Mesh> {
         let transformed_mesh: Mesh;
         match &self.mesh {
             Some(x) => transformed_mesh = Mesh {
@@ -66,9 +63,25 @@ impl Render for GameObject {
                 indices: x.indices.clone(),
                 texture: x.texture,
                 },
-            _ => return
+            _ => return None
         }
-        draw_mesh(&transformed_mesh);
+        Some(transformed_mesh)
+    }
+}
+
+impl Render for GameObject {
+    //TODO REFACTOR!
+    fn render(&self) {
+        match self.get_transformed_mesh() {
+            Some(x) => draw_mesh(&x),
+            _ => ()
+        }
+    }
+}
+
+impl Physics for GameObject {
+    fn update(&mut self) {
+
     }
 }
 
