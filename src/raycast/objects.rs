@@ -19,6 +19,10 @@ impl Transform {
     fn matrix(&self) -> Mat4 {
         Mat4::from_scale_rotation_translation(self.scale, Quat::from_rotation_ypr(self.rotation.x, self.rotation.y, self.rotation.z), self.position)
     }
+
+    pub fn translate(&mut self, dir: Vec3) {
+        self.position = Mat4::from_translation(dir).mul_vec4(self.position.extend(1.)).truncate();
+    }
 }
 
 impl Default for Transform {
@@ -86,7 +90,6 @@ impl Physics for GameObject {
 }
 
 pub struct Primitivies {
-    mesh: Mesh,
 }
 
 impl Primitivies {

@@ -1,13 +1,7 @@
 use macroquad::prelude::*;
-use macroquad::models::{draw_mesh, Vertex};
-use macroquad::color::Color;
 
-use raycast::ray::Ray;
-use raycast::camera::{MainCamera};
 use raycast::objects::{GameObject, Primitivies, Transform};
-use raycast::components::{Render, Physics, Input,};
 use raycast::scene::Scene;
-use raycast::world_axes;
 use raycast::get_scene;
 
 #[macroquad::main("3D")]
