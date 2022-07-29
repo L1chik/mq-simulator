@@ -5,6 +5,7 @@ pub mod camera;
 pub mod objects;
 pub mod components;
 pub mod scene;
+pub mod gizmo;
 
 use crate::scene::Scene;
 

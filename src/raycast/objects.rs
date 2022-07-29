@@ -8,7 +8,7 @@ use crate::{
 };
 
 
-
+#[derive(Clone, Copy)]
 pub struct Transform {
     pub position: Vec3,
     pub rotation: Vec3,
@@ -22,6 +22,10 @@ impl Transform {
 
     pub fn translate(&mut self, dir: Vec3) {
         self.position = Mat4::from_translation(dir).mul_vec4(self.position.extend(1.)).truncate();
+    }
+
+    pub fn translate_around_joint(&mut self, dir: Vec3) {
+        //self.position = ?; 
     }
 }
 
@@ -48,6 +52,7 @@ impl GameObject {
         }
     }
 
+    //Deprecated
     pub fn get_transformed_mesh(&self) -> Option<Mesh> {
         let transformed_mesh: Mesh;
         match &self.mesh {
@@ -71,15 +76,24 @@ impl GameObject {
         }
         Some(transformed_mesh)
     }
+
+    pub fn model_matrix(&self) -> Mat4 {
+        self.transform.matrix()
+    }
 }
 
 impl Render for GameObject {
-    //TODO REFACTOR!
     fn render(&self) {
-        match self.get_transformed_mesh() {
+        unsafe {get_internal_gl().quad_gl }.push_model_matrix(self.model_matrix());
+        match &self.mesh {
             Some(x) => draw_mesh(&x),
             _ => ()
         }
+        unsafe {get_internal_gl().quad_gl }.pop_model_matrix();
+        //match self.get_transformed_mesh() {
+        //    Some(x) => draw_mesh(&x),
+        //    _ => ()
+        //}
     }
 }
 

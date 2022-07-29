@@ -12,26 +12,25 @@ pub struct Ray{
 }
 
 impl Ray {
-    pub fn cast(& self){
+    pub fn cast<'a, 'b>(&'a self) -> Option<&'b mut GameObject>{
         let mut scene = get_scene();
         let mut min_distance = 10000.;
         let mut result : Option<&mut GameObject> = None;
         for obj in scene.objects.iter_mut() {
-            println!("{:?}", obj.transform.position);
             match self.raycast_hit(&obj) {
                 Some(x) =>  {
-                    println!("HIT!");
                     if self.origin.distance(x) <= min_distance {
                         min_distance = self.origin.distance(x);
                         result = Some(obj);
                     }
                 },
-                _ => println!("MISS!")
+                _ => ()
             }
         }  
-        scene.selected = result;
+        result
     }
     pub fn raycast_hit(&self, obj: &GameObject) -> Option<Vec3> {
+        //TODO replace get_transformed_mesh to model_matrix
         let mut mesh: Mesh = Mesh{vertices: vec![], indices: vec![], texture: None};
         let mut result = vec3(0., 0., 0.); 
         let mut min_distance = 10000.;
@@ -62,6 +61,14 @@ impl Ray {
         }else {
             None
         }
+    }
+    
+    pub fn raycast_hit_to_line(&self, pos: Vec3, dir: Vec3) -> Vec3 {
+        (self.direction * pos - dir * self.origin) / (self.direction - dir)
+    }
+
+    pub fn raycast_hit_to_plane(&self, pos: Vec3, n: Vec3) -> Vec3 {
+        self.origin + self.direction * (n.dot(pos - self.origin) / n.dot(self.direction))
     }
 }
 

@@ -21,7 +21,7 @@ pub struct MainCamera {
 impl Default for MainCamera {
     fn default() -> MainCamera{
         MainCamera{
-            position: vec3(0., 0., -10.),
+            position: vec3(0., 2., -10.),
             local_axes: world_axes,
             last_mouse_pos: vec2(0., 0.),
             is_panning: false,
@@ -65,9 +65,10 @@ impl MainCamera {
         world_point / world_point.w
     }
 
-    pub fn world_point_to_screen(&self, point: Vec3) -> Vec4 {
+    pub fn world_point_to_screen(&self, point: Vec3) -> Vec2 {
         let screen_point = self.get_view().matrix().mul_vec4(point.extend(1.));
-        screen_point / screen_point.w
+        let tmp = screen_point / screen_point.w;
+        vec2((tmp.x + 1.) * screen_width() / 2., (1. - tmp.y) * screen_height() / 2.)
     }
 }
 
@@ -141,6 +142,9 @@ impl Render for MainCamera {
         let cam = self.get_view();
         set_camera(&cam);
         draw_grid(50, 10., BLACK, GRAY);
+        draw_line_3d(Vec3::ZERO, self.local_axes.x_axis * 25., RED);
+        draw_line_3d(Vec3::ZERO, self.local_axes.z_axis * 25., BLUE);
+        draw_line_3d(Vec3::ZERO, self.local_axes.y_axis * 25., GREEN);
     }
 }
 	
